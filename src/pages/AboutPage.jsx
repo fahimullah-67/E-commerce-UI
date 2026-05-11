@@ -147,7 +147,6 @@ const AboutPage = () => {
             </div>
           </section>
 
-          {/* === 4. Meet the Team === */}
           <section className="text-center">
             <UsersIcon className="w-10 h-10 text-indigo-600 mx-auto mb-3" />
             <h2 className="text-3xl font-bold text-gray-900 mb-12">
@@ -160,18 +159,18 @@ const AboutPage = () => {
                 className="space-y-3 p-6 bg-white rounded-xl shadow-lg border border-gray-200"
               >
                 <img
-                  src="https://via.placeholder.com/150/4f46e5/ffffff?text=Alex+J"
-                  alt="Alex Johnson"
+                  src="/fahim.png"
+                  alt="Fahim Ullah"
                   className="w-32 h-32 mx-auto rounded-full object-cover shadow-md"
                 />
                 <h3 className="text-2xl font-bold text-gray-900">
-                  Alex Johnson
+                  Fahim Ullah
                 </h3>
                 <p className="text-indigo-600 font-medium text-lg">
-                  CEO & Platform Visionary
+                  Developer & Co-Founder
                 </p>
                 <p className="text-sm text-gray-600">
-                  Alex oversees technology and strategic growth, ensuring a
+                  Fahim oversees technology and strategic growth, ensuring a
                   seamless digital experience for all users.
                 </p>
               </div>
@@ -180,16 +179,18 @@ const AboutPage = () => {
                 className="space-y-3 p-6 bg-white rounded-xl shadow-lg border border-gray-200"
               >
                 <img
-                  src="https://via.placeholder.com/150/6366f1/ffffff?text=Maria+C"
-                  alt="Maria Chen"
+                  src="/fahim.png"
+                  alt="fahim ullah"
                   className="w-32 h-32 mx-auto rounded-full object-cover shadow-md"
                 />
-                <h3 className="text-2xl font-bold text-gray-900">Maria Chen</h3>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Fahim Ullah
+                </h3>
                 <p className="text-indigo-600 font-medium text-lg">
                   Head of Design & Sourcing
                 </p>
                 <p className="text-sm text-gray-600">
-                  Maria is responsible for curating our collections and
+                  Fahim is responsible for curating our collections and
                   upholding our strict standards for quality and ethical
                   sourcing.
                 </p>
@@ -199,16 +200,18 @@ const AboutPage = () => {
                 className="space-y-3 p-6 bg-white rounded-xl shadow-lg border border-gray-200"
               >
                 <img
-                  src="https://via.placeholder.com/150/4338ca/ffffff?text=David+L"
-                  alt="David Lee"
+                  src="/fahim.png"
+                  alt="fahim ullah"
                   className="w-32 h-32 mx-auto rounded-full object-cover shadow-md"
                 />
-                <h3 className="text-2xl font-bold text-gray-900">David Lee</h3>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Fahim Ullah
+                </h3>
                 <p className="text-indigo-600 font-medium text-lg">
-                  Chief Operations Officer (COO)
+                  Tester And Creator (COO)
                 </p>
                 <p className="text-sm text-gray-600">
-                  David manages all logistics, fulfillment, and customer support
+                  Fahim manages all logistics, fulfillment, and customer support
                   operations to ensure every order arrives quickly and safely.
                 </p>
               </div>
