@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      api: "e-commerce-backend-production-6c40.up.railway.app",
+      api: "https://e-commerce-backend-production-6c40.up.railway.app",
       // "/api": "http://localhost:7000",
     },
   },
