@@ -18,37 +18,39 @@ const AdminProductListPage = () => {
     }, []);
 
     const fetchProducts = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            // Use public request (GET /api/products is public)
-            const res = await publicRequest.get('products');
-            setProducts(res.data);
-        } catch (err) {
-            setError("Failed to load products. Check API status.");
-        } finally {
-            setLoading(false);
-        }
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await publicRequest.get("products");
+        setProducts(Array.isArray(res.data) ? res.data : []);
+      } catch (err) {
+        setError("Failed to load products. Check API status.");
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     const handleDelete = async (productId) => {
-        if (!window.confirm("Are you sure you want to delete this product?")) return;
+      if (!window.confirm("Are you sure you want to delete this product?"))
+        return;
 
-        try {
-            // Backend requires a DELETE route (assuming you implement DELETE /api/products/:id protected by Admin)
-            // Example: await adminApi.delete(`products/${productId}`);
-            
-            // For now, we'll simulate success until the DELETE route is implemented:
-            console.log(`Simulating deletion of Product ID: ${productId}`);
+      try {
+        // Backend requires a DELETE route (assuming you implement DELETE /api/products/:id protected by Admin)
+        // Example: await adminApi.delete(`products/${productId}`);
 
-            // Remove product from local state immediately
-            setProducts(prev => prev.filter(p => p._id !== productId));
-        } catch (err) {
-            setError(`Failed to delete product: ${err.response?.data || 'Access Denied'}`);
-        }
+        // For now, we'll simulate success until the DELETE route is implemented:
+        console.log(`Simulating deletion of Product ID: ${productId}`);
+
+        // Remove product from local state immediately
+        setProducts((prev) => prev.filter((p) => p._id !== productId));
+      } catch (err) {
+        setError(
+          `Failed to delete product: ${err.response?.data || "Access Denied"}`,
+        );
+      }
     };
     
-    // Helper function to safely display data
     const safeData = (data) => data !== undefined ? data : 'N/A';
 
     return (

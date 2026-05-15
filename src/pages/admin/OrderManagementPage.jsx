@@ -22,13 +22,14 @@ const OrderManagementPage = () => {
     try {
       // Endpoint: GET /api/orders/admin (Protected)
       const res = await adminApi.get("/orders/admin");
-      setOrders(res.data);
+      setOrders(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       // Error handling for 403, 500, etc.
       const errMsg =
         err.response?.data?.message ||
         "Failed to load orders. Check server/admin status.";
       setError(errMsg);
+      setOrders([]);
     } finally {
       setLoading(false);
     }

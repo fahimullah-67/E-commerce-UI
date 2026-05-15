@@ -11,7 +11,7 @@ const initialProductState = {
     description: '',
     price: 0.01,
     stockQuantity: 1,
-    imageUrl: '',
+    imageURL: '',
     category: '',
     isAvailable: true,
 };
@@ -142,8 +142,8 @@ const ProductForm = () => {
 
                     {/* Description and Image URL */}
                     <div>
-                        <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">Image URL</label>
-                        <input type="url" id="imageUrl" value={productData.imageUrl} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3"/>
+                        <label htmlFor="imageURL" className="block text-sm font-medium text-gray-700">Image URL</label>
+                        <input type="url" id="imageURL" value={productData.imageURL} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3"/>
                     </div>
                     <div>
                         <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>

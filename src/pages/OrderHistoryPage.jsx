@@ -39,10 +39,11 @@ const OrderHistoryPage = () => {
             try {
                 // Endpoint: GET /api/orders/find/:userId
                 const res = await authRequest.get(`orders/find/${user._id}`);
-                setOrders(res.data);
+                setOrders(Array.isArray(res.data) ? res.data : []);
             } catch (err) {
                 console.error("Error fetching orders:", err);
                 setError("Failed to load order history.");
+                setOrders([]);
             } finally {
                 setLoading(false);
             }

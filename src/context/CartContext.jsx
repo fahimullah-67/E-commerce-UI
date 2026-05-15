@@ -90,6 +90,25 @@ export const CartContextProvider = ({ children }) => {
     }
   };
 
+  // --- 4. CLEAR CART LOGIC ---
+  const clearCart = async () => {
+    if (!user) return false;
+
+    dispatch({ type: "CART_START" });
+    try {
+      await getAuthRequest().delete(`carts/${user._id}`);
+      dispatch({ type: "CART_CLEAR" });
+      return true;
+    } catch (err) {
+      console.error("Error clearing cart:", err);
+      dispatch({
+        type: "CART_FAILURE",
+        payload: err.response?.data || "Failed to clear cart",
+      });
+      return false;
+    }
+  };
+
   // Effect: Fetch cart whenever user or token changes
   useEffect(() => {
     if (user && token) {
@@ -111,6 +130,7 @@ export const CartContextProvider = ({ children }) => {
         fetchCart,
         addToCart,
         updateCartQuantity,
+        clearCart,
         itemCount,
       }}
     >

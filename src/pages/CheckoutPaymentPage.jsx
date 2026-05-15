@@ -10,89 +10,104 @@ import axios from 'axios';
 
 const CheckoutPaymentPage = () => {
     const { checkoutData, updateCheckoutData, clearCheckoutData } = useContext(CheckoutContext);
-    const { cart, itemCount, fetchCart, updateCartQuantity } = useContext(CartContext);
+    const { cart, itemCount, fetchCart, updateCartQuantity, clearCart } =
+      useContext(CartContext);
     const { user, token } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [selectedPayment, setSelectedPayment] = useState('credit_card');
-    const [cardDetails, setCardDetails] = useState({ number: '', expiry: '', cvv: '' });
+    const [selectedPayment, setSelectedPayment] = useState("credit_card");
+    const [cardDetails, setCardDetails] = useState({
+      number: "",
+      expiry: "",
+      cvv: "",
+    });
     const [loading, setLoading] = useState(false);
     const [orderError, setOrderError] = useState(null);
 
     // --- Axios Instance for Order Submission ---
     const authRequest = axios.create({
-        baseURL: '/api/',
-        headers: { token: `Bearer ${token}` },
+      baseURL: "/api/",
+      headers: { token: `Bearer ${token}` },
     });
 
     // Redirect logic: Ensure user is logged in and address is set
     useEffect(() => {
-        if (!user) {
-            navigate('/login');
-        } else if (!checkoutData.shippingAddress) {
-            navigate('/checkout/address');
-        } else if (!cart || cart.length === 0) {
-             navigate('/cart');
-        }
+      if (!user) {
+        navigate("/login");
+      } else if (!checkoutData.shippingAddress) {
+        navigate("/checkout/address");
+      } else if (!cart || cart.length === 0) {
+        navigate("/cart");
+      }
     }, [user, checkoutData.shippingAddress, cart, navigate]);
 
     // Calculate total amount
     const cartTotal = useMemo(() => {
-        if (!cart) return 0;
-        return cart.reduce((total, item) => total + (item.productId?.price * item.quantity), 0);
+      if (!cart) return 0;
+      return cart.reduce(
+        (total, item) => total + item.productId?.price * item.quantity,
+        0,
+      );
     }, [cart]);
-    
-    const shippingCost = 10.00;
+
+    const shippingCost = 10.0;
     const orderTotal = cartTotal + shippingCost;
 
     // Handle payment detail changes (simulated)
     const handleCardChange = (e) => {
-        setCardDetails(prev => ({ ...prev, [e.target.id]: e.target.value }));
+      setCardDetails((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     };
 
     // --- Order Submission Handler ---
     const handlePlaceOrder = async () => {
-        setLoading(true);
-        setOrderError(null);
+      setLoading(true);
+      setOrderError(null);
 
-        // 1. Prepare payment details payload (simulated)
-        let paymentPayload;
-        if (selectedPayment === 'credit_card') {
-            if (!cardDetails.number || !cardDetails.cvv) {
-                setOrderError("Please fill in required card details.");
-                setLoading(false);
-                return;
-            }
-            paymentPayload = { method: 'Credit Card', last4: cardDetails.number.slice(-4), transactionId: `TXN-${Date.now()}` };
-        } else {
-            paymentPayload = { method: 'Cash on Delivery', transactionId: `TXN-COD-${Date.now()}` };
+      // 1. Prepare payment details payload (simulated)
+      let paymentPayload;
+      if (selectedPayment === "credit_card") {
+        if (!cardDetails.number || !cardDetails.cvv) {
+          setOrderError("Please fill in required card details.");
+          setLoading(false);
+          return;
         }
+        paymentPayload = {
+          method: "Credit Card",
+          last4: cardDetails.number.slice(-4),
+          transactionId: `TXN-${Date.now()}`,
+        };
+      } else {
+        paymentPayload = {
+          method: "Cash on Delivery",
+          transactionId: `TXN-COD-${Date.now()}`,
+        };
+      }
 
-        try {
-            // 2. Prepare the final request payload
-            const orderPayload = {
-                shippingAddress: checkoutData.shippingAddress,
-                paymentDetails: paymentPayload,
-            };
+      try {
+        // 2. Prepare the final request payload
+        const orderPayload = {
+          shippingAddress: checkoutData.shippingAddress,
+          paymentDetails: paymentPayload,
+        };
 
-            // 3. Submit Order to Backend API
-            // Endpoint: POST /api/orders
-            const res = await authRequest.post('orders', orderPayload);
+        // 3. Submit Order to Backend API
+        // Endpoint: POST /api/orders
+        const res = await authRequest.post("orders", orderPayload);
 
-            // 4. Success: Clear frontend states
-            clearCheckoutData(); // Clear address and payment context
-            // Note: The backend handles clearing the cart via database logic (DELETE /api/carts)
+        // 4. Success: Clear frontend states
+        clearCheckoutData(); // Clear address and payment context
+        await clearCart(); // Clear the shopping cart after successful order
 
-            // 5. Redirect to Order Detail/Confirmation Page
-            navigate(`/orders/${res.data._id}`);
-
-        } catch (err) {
-            console.error("Order submission error:", err);
-            const errMsg = err.response?.data || "Failed to place order. Please try again.";
-            setOrderError(errMsg);
-        } finally {
-            setLoading(false);
-        }
+        // 5. Redirect to Order Detail/Confirmation Page
+        navigate(`/orders/${res.data._id}`);
+      } catch (err) {
+        console.error("Order submission error:", err);
+        const errMsg =
+          err.response?.data || "Failed to place order. Please try again.";
+        setOrderError(errMsg);
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (!user || !checkoutData.shippingAddress) {

@@ -1,6 +1,6 @@
 // src/pages/HomePage.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Activity } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -14,7 +14,6 @@ import {
 } from "@heroicons/react/24/solid";
 import { publicRequest } from "../utils/api";
 
-// --- Static Mock Data (for UI elements only) ---
 const MOCK_CATEGORIES = [
   {
     name: "Men's Apparel",
@@ -37,11 +36,31 @@ const MOCK_CATEGORIES = [
   },
 ];
 const MOCK_BRANDS = [
-  { name: "BrandA", logoUrl: "https://placeholder.com/100x40?text=Brand+A" },
-  { name: "BrandB", logoUrl: "https://placeholder.com/100x40?text=Brand+B" },
-  { name: "BrandC", logoUrl: "https://placeholder.com/100x40?text=Brand+C" },
-  { name: "BrandD", logoUrl: "https://placeholder.com/100x40?text=Brand+D" },
-  { name: "BrandE", logoUrl: "https://placeholder.com/100x40?text=Brand+E" },
+  {
+    name: "BrandA",
+    logoUrl:
+      "https://i.pinimg.com/1200x/a8/58/33/a8583379aca11f2e0108c688c6122a79.jpg",
+  },
+  {
+    name: "BrandB",
+    logoUrl:
+      "https://i.pinimg.com/1200x/9a/a5/b8/9aa5b892dc9c5d66b00fac905c98411c.jpg",
+  },
+  {
+    name: "BrandC",
+    logoUrl:
+      "https://wowodi.com/cdn/shop/products/c6d4b13089aed956fc0eec2b5dc1b379.jpg?v=1691234843&width=823",
+  },
+  {
+    name: "BrandD",
+    logoUrl:
+      "https://i.pinimg.com/1200x/7a/8a/5d/7a8a5df631540e31b968e5116fb78a8f.jpg",
+  },
+  {
+    name: "BrandE",
+    logoUrl:
+      "https://i.pinimg.com/1200x/9a/a5/b8/9aa5b892dc9c5d66b00fac905c98411c.jpg",
+  },
 ];
 
 const HomePage = () => {
@@ -52,14 +71,13 @@ const HomePage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // Endpoint: GET /api/products
-        const res = await publicRequest.get("products");
-        const products = res.data;
+        const res = await publicRequest.get("/products");
+        const products = Array.isArray(res.data) ? res.data : [];
 
-        // Use the first 4 products as 'featured'
         setFeaturedProducts(products.slice(0, 4));
       } catch (err) {
         console.error("Failed to fetch products for Home Page:", err);
+        setFeaturedProducts([]);
       } finally {
         setLoading(false);
       }
@@ -72,7 +90,6 @@ const HomePage = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
       <main className="flex-grow">
-        {/* === 1. Hero Section === */}
         <section className="bg-gradient-to- from-purple-100 to-indigo-100 py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto flex flex-row lg:flex-row items-center justify-between gap-12">
             <div className="lg:w-1/2 text-center lg:text-left">
@@ -89,7 +106,7 @@ const HomePage = () => {
             </div>
             <div className="lg:w-1/2 flex justify-end">
               <img
-                src="https://i.pinimg.com/736x/d3/8b/81/d38b818d887c962def574123d3b65ea8.jpg"
+                src="https://i.pinimg.com/1200x/ab/1a/88/ab1a88a0df893524caa263929ce6cb3d.jpg"
                 alt="Stylish Fashion Collection"
                 className="rounded-3xl shadow-2xl object-cover w-full max-w-lg"
               />
@@ -97,7 +114,6 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* === 2. Trusted Brands Section === */}
         <section className="bg-gray-900 py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4">
@@ -106,14 +122,31 @@ const HomePage = () => {
                   key={index}
                   src={brand.logoUrl}
                   alt={brand.name}
-                  className="h-10 opacity-70 hover:opacity-100 transition duration-300 filter grayscale hover:grayscale-0"
+                  className="h-40 opacity-70 hover:opacity-100 transition duration-300 filter grayscale hover:grayscale-0 animate-brandSlide"
+                  style={{
+                    animation: "10s linear 1s infinite alternate slide-in",
+                  }}
                 />
               ))}
             </div>
+            <style>{`
+              @keyframes slide-in {
+                from {
+                  transform: translateX(100vh);
+                  opacity: 0.5;
+                }
+                to {
+                  transform: translateX(-100vh);
+                  opacity: 1;
+                }
+              }
+              .animate-brandSlide {
+                animation: slide-in 3s linear 1s infinite alternate;
+              }
+            `}</style>
           </div>
         </section>
 
-        {/* === 3. Featured Products === */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
@@ -122,22 +155,91 @@ const HomePage = () => {
 
             {loading && (
               <div className="text-center text-lg text-indigo-600">
+                <Activity className="animate-spin h-8 w-8 mx-auto mb-4" />
                 Loading products...
               </div>
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {!loading &&
-                featuredProducts.map((product) => (
-                  <ProductCard key={product._id} product={product} />
+                featuredProducts.map((product, index) => (
+                  <div
+                    key={product._id}
+                    className="animate-slideInRight"
+                    style={{
+                      animationDelay: `${index * 0.15}s`,
+                      animationDuration: "1s",
+                      animationFillMode: "both",
+                    }}
+                  >
+                    <ProductCard product={product} />
+                  </div>
                 ))}
             </div>
+            <style>{`
+              @keyframes slideInRight {
+                from {
+                  opacity: 0;
+                  transform: translateX(100px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
+              .animate-slideInRight {
+                animation: slideInRight ease-out forwards;
+              }
+            `}</style>
           </div>
         </section>
 
-        {/* === 4. Unique Selling Points (USPs) === */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 bg-indigo-600 text-white">
-          {/* ... (USPs content remains the same) ... */}
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-4xl font-extrabold text-center mb-12">
+              Why Shop With Us?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="inline-block p-4 bg-indigo-400 rounded-full mb-4">
+                  <CurrencyDollarIcon className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Best Prices</h3>
+                <p>
+                  Competitive pricing with frequent discounts and deals on all
+                  products.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="inline-block p-4 bg-indigo-400 rounded-full mb-4">
+                  <CubeTransparentIcon className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Quality Products</h3>
+                <p>
+                  Premium selection of authentic brands and verified sellers.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="inline-block p-4 bg-indigo-400 rounded-full mb-4">
+                  <GlobeAltIcon className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Fast Shipping</h3>
+                <p>
+                  Quick delivery worldwide with real-time tracking on all
+                  orders.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="inline-block p-4 bg-indigo-400 rounded-full mb-4">
+                  <TagIcon className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Best Deals</h3>
+                <p>
+                  Exclusive offers and loyalty rewards for our valued customers.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* === 5. Shop By Category === */}
