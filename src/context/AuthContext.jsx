@@ -2,6 +2,7 @@
 
 import React, { createContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/api';
 
 const INITIAL_STATE = {
     user: JSON.parse(localStorage.getItem('user')) || null,
@@ -54,7 +55,7 @@ export const AuthContextProvider = ({ children }) => {
     const login = async (credentials) => {
       dispatch({ type: "LOGIN_START" });
       try {
-        const res = await axios.post(`/api/auth/login`, credentials);
+        const res = await axios.post(`${API_BASE_URL}auth/login`, credentials);
 
         const { token, password, ...userWithoutPass } = res.data;
 

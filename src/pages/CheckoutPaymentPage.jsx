@@ -7,6 +7,7 @@ import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/api';
 
 const CheckoutPaymentPage = () => {
     const { checkoutData, updateCheckoutData, clearCheckoutData } = useContext(CheckoutContext);
@@ -26,7 +27,7 @@ const CheckoutPaymentPage = () => {
 
     // --- Axios Instance for Order Submission ---
     const authRequest = axios.create({
-      baseURL: "/api/",
+      baseURL: API_BASE_URL,
       headers: { token: `Bearer ${token}` },
     });
 

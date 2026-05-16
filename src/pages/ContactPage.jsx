@@ -13,6 +13,7 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
+import { API_BASE_URL } from "../utils/api";
 gsap.registerPlugin(ScrollTrigger);
 
 const ContactPage = () => {
@@ -28,7 +29,7 @@ const ContactPage = () => {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ message: null, type: null });
 
-  const API_BASE_URL = "/api/contact/message";
+  const CONTACT_URL = `${API_BASE_URL}contact/message`;
 
   const addToRefs = (el) => {
     if (el && !sectionRefs.current.includes(el)) {
@@ -79,7 +80,7 @@ const ContactPage = () => {
 
     try {
       // Call the Express backend route that uses the Resend API
-      await axios.post(API_BASE_URL, formData);
+      await axios.post(CONTACT_URL, formData);
 
       setStatus({
         message: "Thank you! Your project inquiry has been sent successfully.",

@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/api';
 import { CheckCircleIcon, CurrencyDollarIcon, MapPinIcon } from '@heroicons/react/24/outline';
 
 const OrderDetailPage = () => {
@@ -16,7 +17,7 @@ const OrderDetailPage = () => {
     const [error, setError] = useState(null);
 
     const authRequest = axios.create({
-        baseURL: '/api/', 
+        baseURL: API_BASE_URL,
         headers: { token: `Bearer ${token}` },
     });
     
